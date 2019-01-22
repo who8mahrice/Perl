@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+# This provides a quick and easy way to see which items are in a list 
+# and how many times each one appears
+use warnings;
+use strict;
+use Data::Dumper;
+
+my @people = qw{ fred barney fred wilma dino barney fred pebbles };
+my %count; # new empty hash
+print $count{$_}++,"\n" foreach @people; # creates new keys and values as needed
+
+print Dumper \%count;
