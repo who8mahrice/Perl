@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+use strict; 
+use warnings;
+use feature 'say'; 
+use v5.10; 
+
+# use Data::Nested;
+# my $obj = new Data::Nested;
+use Data::Dumper;
+use Scalar::Util qw(reftype);
+
+sub Squared($); # function prototype
+
+my $value = 2;
+Squared($value); # function call
+
+#Recursive Function
+sub Squared($) {
+	my ($value) = $_[0];
+	if ($value < 1000) {
+		if ($value > 2) {
+			print("Squared Value = ".$value."\n" );
+		}
+		return (Squared($value * $value));
+	}
+	else {
+		return (0);
+	}
+}
