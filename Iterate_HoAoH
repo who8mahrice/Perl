@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+use strict; 
+use warnings;
+use feature 'say'; 
+use v5.10; 
+use Data::Dumper;
+use Scalar::Util qw(reftype);
+
+# hash of array of hash aka HoAoH
+my $oWkBook    = {
+    students =>[
+        {fname=>'joe',lname=>'bloe',age=>'18'},
+        {fname=>'jill',lname=>'bill',age=>'16'},
+    ],
+    teachers => [
+        {fname=>'joe',lname=>'sloe',age=>'38'},
+        {fname=>'jill',lname=>'sill',age=>'36'},
+    ],
+    admins  =>[
+        {fname=>'koe',lname=>'moe',age=>'58'},
+        {fname=>'dill',lname=>'mill',age=>'56'},
+    ],
+};
+
+### iterate (current)
+for my $oWkSheet (keys %{$oWkBook}){
+    for my $oRec (@{$oWkBook->{$oWkSheet}}){
+        for my $oFld (sort keys %{$oRec}){
+           print $oRec->{$oFld},"\n";
+        };
+    };
+};
