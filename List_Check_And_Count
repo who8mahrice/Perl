@@ -10,3 +10,4 @@ my %count; # new empty hash
 print $count{$_}++,"\n" foreach @people; # creates new keys and values as needed
 
 print Dumper \%count;
+
