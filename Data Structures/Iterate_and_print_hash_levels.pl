@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# from link: https://www.daniweb.com/programming/software-development/threads/461091/how-to-find-the-depth-of-perl-hash-which-has-no-consistent-structure
 use strict; 
 use warnings;
 use feature 'say'; 
