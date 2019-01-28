@@ -41,9 +41,16 @@ sub dump_data {
       unless ref $ref eq 'HASH';
     for ( keys %{$ref} ) {
         print $/, 'Level ', $level, "\t" x $level, $_, '=>';
-        if ( ref $ref->{$_} eq 'HASH' ) {
-            dump_data( $ref->{$_}, ++$level );    ## sub called itself
-        }
-        else { print $ref->{$_}, $/ }
+if ( ref $ref->{$_} eq 'HASH' ) { 
+    dump_data( $ref->{$_}, ++$level ); ## sub called itself 
+    --$level; ######## ADD THIS 
+    } 
+else { print $ref->{$_}, $/ }
+  if ( ref $ref->{$_} eq 'HASH' ) { 
+        dump_data( $ref->{$_}, ++$level ); ## sub called itself 
+        --$level; ######## ADD THIS 
+    } else { 
+        print $ref->{$_}, $/ 
+    }
     }
 }
