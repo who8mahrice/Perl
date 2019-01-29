@@ -31,6 +31,9 @@ my %hash1 = (
     status => "unmarried"
 );
  my $start_level = 0;
+
+ print Dumper(\%hash1);
+
 dump_data( \%hash1, $start_level );
 
 sub dump_data {
@@ -38,9 +41,10 @@ sub dump_data {
     die "You can only pass an HASH reference data"
       unless ref $ref eq 'HASH';
     for ( keys %{$ref} ) {
-        print $/, 'Level ', $level, "\t" x $level, $_, '=>';
+        print $/, 'Level ', $level, "\t" x $level, $_, ' => ';
         if ( ref $ref->{$_} eq 'HASH' ) {
             dump_data( $ref->{$_}, ++$level );    ## sub called itself
+            --$level;
         }
         else { print $ref->{$_}, $/ }
     }
