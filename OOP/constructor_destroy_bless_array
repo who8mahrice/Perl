@@ -1,0 +1,99 @@
+package CD::Music;
+$VERSION = 1.00;
+use strict;
+use vars qw( $AUTOLOAD ); # Keep 'use strict' happy
+use Carp;
+
+use constant NAME=> 0;
+use constant ARTIST=> 1;
+use constant PUBLISHER=> 2;
+use constant ISBN=> 3;
+use constant TRACKS=> 4;
+use constant ROOM=> 5;
+use constant SHELF=> 6;
+use constant RATING=> 7;
+
+# Create a mapping from previous hash keys to array indices
+# (this is needed to provide hash-like arguments for new)
+my %_index_for;
+ @_index_for{qw(name artist publisher ISBN tracks rating room shelf)} = (NAME,ARTIST,PUBLISHER,ISBN,TRACKS,RATING,ROOM,SHELF);
+
+ # Set up the default data (same as in the hash version, but more concise)
+my @_default_data;
+@_default_data[ NAME,ARTIST,PUBLISHER,ISBN,TRACKS,RATING, ROOM,SHELF ] = ('???','???','???',0,'???',-1,"uncataloged","" );
+
+{
+# Private class attribute, as in the hash version
+my $_count = 0;
+# Retrieve object count
+sub get_count { $_count; }
+# Private count increment/decrement methods
+sub _incr_count { ++$_count }
+sub _decr_count { --$_count }
+}
+
+# Constructor may be called as a class method
+sub new
+{
+my ($caller, %arg) = @_;
+my $caller_is_obj = ref($caller);
+my $class = $caller_is_obj || $caller;
+no strict "refs";
+my $self = bless [], $class;
+
+foreach my $member ( keys %_index_for )
+{
+	my $index = $_index_for{$member};
+	if (exists $arg{$member})
+		{ $self->[$index] = $arg{$member} }
+	elsif ($caller_is_obj)
+		{ $self->[$index] = $caller->[$index] }
+	else
+		{ $self->[$index] = $_default_data[$index] }
+}
+$self->_incr_count();
+return $self;
+}
+
+# Destructor adjusts class count
+sub DESTROY
+{
+	$_[0]->_decr_count();
+}
+
+# get or set room&shelf in one method
+sub get_location{ ($_[0]->get_room(), $_[0]->get_shelf()) }
+
+sub set_location
+{
+my ($self, $room, $shelf) = @_;
+	$self->set_room($room) if $room;
+	$self->set_shelf($shelf) if $shelf;
+return;
+}
+# Implement all the other get_… and set_… methods,
+sub get_name{ return $_[0]->[NAME]}
+
+sub get_artist{ return $_[0]->[ARTIST]}
+sub get_publisher{ return $_[0]->[PUBLISHER]}
+sub get_ISBN{ return $_[0]->[ISBN]}
+sub get_tracks{ return $_[0]->[TRACKS]}
+sub get_room{ return $_[0]->[ROOM]}
+sub get_shelf{ return $_[0]->[SHELF]}
+sub get_rating{ return $_[0]->[RATING]}
+sub set_room{ $_[0]->[ROOM] = $_[1]}
+sub set_shelf{ $_[0]->[SHELF] = $_[1]}
+sub set_rating{ $_[0]->[RATING] = $_[1]}
+
+package main;
+use strict;
+my $cd = CD::Music->new(name=> "Piano Concerto 20",
+	artist=> "Mozart",
+	rating=> 10,
+	room=> 5,
+	shelf=> 1,
+	publisher=> "Salieri Intl.",
+	ISBN=> "1426-43235624-2",);
+$cd->set_location(4,5);
+print "Room: ", $cd->get_room," and Self: ", $cd->get_shelf, "\n";
+print $cd->get_artist;
