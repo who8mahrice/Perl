@@ -1,0 +1,58 @@
+# From OO Perl book pg 239
+package Incremental;
+
+sub TIESCALAR
+{
+	my ($class) = @_;
+	my $implementation = 0;
+	bless \$implementation, $class;
+}
+
+sub FETCH
+{
+	my ($implementation) = @_;
+	return ++${$implementation};
+}
+
+sub STORE
+{
+	my ($implementation, $newval) = @_;
+	croak "non-ascending assignment" unless ${$implementation} <= $newval;
+	${$implementation} = $newval;
+}
+
+sub DESTROY
+{
+	# Nothing to be done in this case
+}
+
+package main;# or wherever
+
+tie $incr, "Incremental";# associate $incr with Incremental package
+
+print $incr;# calls Incremental::FETCH, prints 1
+
+print $incr;# calls Incremental::FETCH, prints 2
+
+print $incr;# calls Incremental::FETCH, prints 3
+
+$incr = 100;# calls Incremental::STORE
+
+$incr += 100;# calls Incremental::FETCH, which returns 101
+# then Incremental::STORE, which stores 201
+
+$incr++;# calls Incremental::FETCH, which returns 202
+# then Incremental::STORE, which stores 203
+
+$next = $incr++;# calls Incremental::FETCH, which returns 204
+# then Incremental::FETCH, which returns 205
+# then Incremental::STORE, which stores 206
+# $next is assigned 204
+
+++$incr;# calls Incremental::FETCH, which returns 207
+# then Incremental::STORE, which stores 208
+
+$next = ++$incr;# calls Incremental::FETCH, which returns 209
+# then Incremental::STORE, which stores 210
+# then Incremental::FETCH, which returns 211
+# $next is assigned 211
