@@ -1,0 +1,68 @@
+# 9.1 A package for variable tracking from OO Perl book pg 241
+use strict;
+use warnings;
+use diagnostics;
+
+use feature 'say'; # word for print
+
+use feature 'switch'; # for given when
+
+use v5.16;
+
+use Track::Track;
+
+my $critical_temp;
+
+ # my $msg = Track->hi();
+
+Track->scalar($critical_temp);
+
+my $t = $critical_temp; # same as: $t = tied($critical_temp)->FETCH()
+$critical_temp = 100; # same as: tied($critical_temp)->STORE(100)
+
+Track->debug($critical_temp);
+
+#--------package
+package Track;
+$VERSION = 1.00;
+use strict;
+
+sub TIESCALAR
+{
+	my ($class, $val) = @_;
+	bless { val => $val, src => [caller(1)] }, $class
+}
+
+sub FETCH
+{
+	my ($impl) = @_;
+	return $impl->{val};
+}
+
+sub STORE
+{
+	my ($impl, $newval) = @_;
+	#print STDERR "In Store!\n"; # Doesnt print...not sure why
+	$impl->{val} = $newval;
+	$impl->{src} = [caller];
+}
+
+sub scalar
+{
+	print STDERR "In Scalar!\n";
+tie $_[1], $_[0], $_[1];
+}
+
+sub debug
+{
+	my $impl = tied($_[1]);
+	my ($cur_pkg, $cur_file, $cur_line) = caller;
+	my ($src_pkg, $src_file, $src_line) = @{$impl->{src}};
+	print STDERR"At $cur_file line $cur_line in package $cur_pkg the\n",
+	"tracked variable has the value $impl->{val}, which was\n",
+	"assigned at $src_file line $src_line in package $src_pkg\n";
+}
+
+# sub hi {
+# 	print "Hi there\n";
+# }
