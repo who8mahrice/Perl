@@ -1,0 +1,29 @@
+
+
+# To get %:: Main Symbol Table (%main::)
+foreach $key (keys %::) {
+	print "$key => $::{$key}\n";
+}
+
+
+# %ENV Environment Variables...works for Linux and Windows
+while(($key, $value) = each(%ENV)) {
+	print "$key => $value\n";
+}
+
+
+
+# %INC Included Files
+# The hash %INC has an entry for each file name you've inluded with the 'do' or
+# 'require' statments. The key is the file name you specified, and the value is the location of the file.
+require English;
+print $INC{'English.pm'};
+# Prints: /usr/local/lib/perl/English.pm
+
+
+
+
+# @INC array (not to be confused with the %INC hash, which holds the names of modules you've 
+# includded with 'do' or 'require') holdes the list of places to look for Perl scripts to be evaluated by the 'do',
+# 'require', or 'use' constructs.
+print join(", ", @INC);
