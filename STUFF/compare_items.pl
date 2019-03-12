@@ -22,14 +22,27 @@ if (@missing) {
 		push @$items, @missing;
  }
 }
-my @gilligan = qw(red_shirt hat lucky_socks water_bottle);
-check_required_items('gilligan', \@gilligan);
 
 my @skipper = qw(blue_shirt hat jacket preserver sunscreen);
-check_required_items('skipper', \@skipper);
+my @skipper_with_name = ('Skipper' => \@skipper);
 
 my @professor = qw(sunscreen water_bottle slide_rule batteries radio);
-check_required_items('professor', \@professor);
+my @professor_with_name = ('Professor' => \@professor);
+
+my @gilligan = qw(red_shirt hat lucky_socks water_bottle);
+my @gilligan_with_name = ('Gilligan' => \@gilligan);
+
+my @all_with_names = (
+	\@skipper_with_name,
+	\@professor_with_name,
+	\@gilligan_with_name,
+);
+
+for my $person (@all_with_names) {
+	my $who = $$person[0];
+	my $provisions_reference = $$person[1];
+	check_required_items($who, $provisions_reference);
+}
 
 #----------------------------------------------------------------------------------------------------
 
