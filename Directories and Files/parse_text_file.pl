@@ -1,4 +1,5 @@
 # Parses data from filename.txt and sorts it by highest to lowest bytes value
+# Data is stored in a Hash of Hash.
 # See Intermediate Perl book pg 319 for more information
 #!/usr/bin/perl 
 use Data::Dumper;
