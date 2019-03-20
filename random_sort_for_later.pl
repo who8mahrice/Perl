@@ -1,6 +1,53 @@
 #------------------------------------------------------------------------
 
 =begin
+# Intermediate Perl pg 96 (Subroutine Reference)
+# When a person enters a room the person already in the room says Hi
+# and the person who just entered the room says Hi back
+
+#!/usr/bin/perl 
+use warnings;
+use Data::Dumper;
+
+#Uses a Hash with subroutine references as values.
+my %greets = (
+	Skipper => sub {
+		my $person = shift;
+		print "Skipper: Hey there, $person!\n";
+	},
+	Gilligan => sub {
+	my $person = shift;
+	if ($person eq 'Skipper') {
+		print "Gilligan: Sir, yes, sir, $person!\n";
+	} else {
+		print "Gilligan: Hi, $person!\n";
+	}
+	},
+	Professor => sub {
+		my $person = shift;
+		print "Professor: By my calculations, you must be $person!\n";
+	},
+	Ginger => sub {
+		my $person = shift;
+		print "Ginger: (in a sultry voice) Well hello, $person!\n";
+	},
+);
+
+my @room; # initially empty
+for my $person (qw(Gilligan Skipper Professor Ginger)) {
+	print "\n";
+	print "$person walks into the room.\n";
+	for my $room_person (@room) {
+		$greets{$person}->($room_person); # speaks
+		$greets{$room_person}->($person); # gets reply
+	}
+	push @room, $person; # come in, get comfy
+}
+=cut
+
+#------------------------------------------------------------------------
+
+=begin
 # From Intermediate Perl Book pg 89
 # Using a map and inner map to make anonoymous arrays
 
