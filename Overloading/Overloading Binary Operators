@@ -1,0 +1,65 @@
+use Datum::Datum;
+
+$object1 = Datum->new(1);
+print '$object1 = ', $object1->get_data, "\n";
+
+$object2 = Datum->new(2);
+print '$object2 = ', $object2->get_data, "\n";
+
+$object3 = $object1 + $object2;
+print '$object1 + $object2 = ', $object3->{DATA}, "\n";
+
+$object4 = $object1 + 3;
+print '$object1 + 3 = ', $object4->{DATA}, "\n";
+
+$object5 = $object1 - $object2;
+print '$object1 - $object2 = ', $object5->{DATA}, "\n";
+
+$object6 = 7 - $object2;
+print '7 - $object2 = ', $object6->{DATA}, "\n";
+
+
+package Datum;
+
+use overload
+	"+" => \&add,
+	"-" => \&subtract;
+
+sub new {
+	shift;
+	my $self = {};
+	$self->{DATA} = shift;
+	bless $self;
+	return $self;
+}
+
+sub get_data {
+	$self = shift;
+	return $self->{DATA};
+}
+
+sub add {
+	my ($obj1, $obj2) = @_;
+
+	$operand1 = ref $obj1  eq 'Datum' ? $obj1->{DATA} : $obj1;
+	$operand2 = ref $obj2  eq 'Datum' ? $obj2->{DATA} : $obj2;
+
+	$new_object = Datum->new($operand1 + $operand2);
+	return $new_object;
+}
+
+sub subtract {
+	my($obj1, $obj2, $reverse) = @_;
+
+	$operand1 = ref $obj1  eq 'Datum' ? $obj1->{DATA} : $obj1;
+	$operand2 = ref $obj2  eq 'Datum' ? $obj2->{DATA} : $obj2;
+
+	if($reverse) {
+		$new_object = Datum->new($operand2 - $operand1);
+	} else {
+		$new_object = Datum->new($operand1 - $operand2);
+	}
+	return $new_object;
+}
+
+return 1;
