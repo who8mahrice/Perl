@@ -7,7 +7,7 @@ use Carp;
 
 {
 # Encapsulated class data
-my %_attr_data =#		   DEFAULT 	ACCESSIBILITY
+my %_attr_data =    #		   DEFAULT 	ACCESSIBILITY
 	(   
 		_name		=> ['???',	'read'],
 	    	_artist		=> ['???',	'read'],
