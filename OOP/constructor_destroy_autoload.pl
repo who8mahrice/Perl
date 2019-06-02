@@ -4,19 +4,22 @@ $VERSION = 1.00;
 use strict;
 use vars qw( $AUTOLOAD ); # Keep 'use strict' happy
 use Carp;
+
 {
 # Encapsulated class data
-my %_attr_data =#DEFAULTACCESSIBILITY
-	(   _name=> ['???','read'],
-		_artist=> ['???','read'],
-		_publisher=> ['???','read'],
-		_ISBN=> ['???','read'],
-		_tracks=> ['???','read'],
-		_rating=> [-1,'read/write'],
-		_room=> ['uncataloged','read/write'],
-		_shelf=> ["",'read/write'],
-		);
+my %_attr_data =#		   DEFAULT 	ACCESSIBILITY
+	(   
+		_name		=> ['???',	'read'],
+	    	_artist		=> ['???',	'read'],
+		_publisher	=> ['???',	'read'],
+		_ISBN		=> ['???',	'read'],
+		_tracks		=> ['???',	'read'],
+		_rating		=> [-1,		'read/write'],
+		_room		=> ['uncataloged','read/write'],
+		_shelf		=> ["",		'read/write'],
+	);
 my $_count = 0;
+
 # Class methods, to operate on encapsulated class data
 	# Is a specified object attribute accessible in a given mode
 	sub _accessible
@@ -44,6 +47,7 @@ my $_count = 0;
 	sub _incr_count { ++$_count }
 	sub _decr_count { --$_count }
 }
+
 # Constructor may be called as a class method
 # (in which case it uses the class's default values),
 # or an object method
